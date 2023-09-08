@@ -26,7 +26,7 @@ WIN_API HRGN WIN_API_CALLCONV CreateRectRgn(int x1, int y1, int x2, int y2);
 #pragma comment(lib, "dwmapi.lib")
 WIN_API HRESULT WIN_API_CALLCONV DwmExtendFrameIntoClientArea(HWND hWnd, const void* pMarInset);
 WIN_API HRESULT WIN_API_CALLCONV DwmIsCompositionEnabled(BOOL* pfEnabled);
-
+WIN_API HRESULT WIN_API_CALLCONV DwmSetWindowAttribute(HWND hwnd, DWORD dwAttribute, LPCVOID pvAttribute, DWORD cbAttribute);
 namespace
 {
     bool IsCompositionEnabled()
@@ -160,6 +160,8 @@ WindowsWindow::WindowsWindow(const CreateWindowSettings& settings)
 #endif
 
 #if USE_EDITOR
+    BOOL useDarkMode = true;
+    ::DwmSetWindowAttribute(_handle, 20, &useDarkMode, sizeof(useDarkMode));
     // Enable file dropping
     if (_settings.AllowDragAndDrop)
     {
