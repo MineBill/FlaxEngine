@@ -1,6 +1,7 @@
 // Copyright (c) 2012-2023 Wojciech Figat. All rights reserved.
 
 using System;
+using FlaxEditor;
 
 namespace FlaxEngine
 {
@@ -62,7 +63,18 @@ namespace FlaxEngine
         {
             Input.ActionTriggered += Handler;
             Name = name;
+#if FLAX_EDITOR
+            Editor.Instance.PlayModeEnd += OnPlayModeEnd;
+#endif
         }
+
+#if FLAX_EDITOR
+        private void OnPlayModeEnd()
+        {
+            Input.ActionTriggered -= Handler;
+            Editor.Instance.PlayModeEnd -= OnPlayModeEnd;
+        }
+#endif
 
         /// <summary>
         /// Finalizes an instance of the <see cref="InputEvent"/> class.
