@@ -270,9 +270,22 @@ namespace FlaxEditor.GUI.Input
         {
             if (_isSliding && !RootWindow.Window.IsMouseFlippingHorizontally)
             {
+                var slow = Root.GetKey(KeyboardKeys.Shift);
                 // Update sliding
                 var slideLocation = location + Root.TrackingMouseOffset;
-                ApplySliding(Mathf.RoundToInt(slideLocation.X - _startSlideLocation.X) * _slideSpeed);
+                if (Root.GetKeyDown(KeyboardKeys.Shift))
+                {
+                    _startSlideLocation = location + Root.TrackingMouseOffset;
+                    _startSlideValue = _value;
+                }
+                if (Root.GetKeyUp(KeyboardKeys.Shift))
+                {
+                    _startSlideLocation = location + Root.TrackingMouseOffset;
+                    _startSlideValue = _value;
+                }
+                var speed = (slow ? _slideSpeed * 0.1f : _slideSpeed);
+                var offset = Mathf.RoundToInt(slideLocation.X - _startSlideLocation.X) * speed;
+                ApplySliding(offset);
                 return;
             }
 
